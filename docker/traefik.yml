@@ -1,0 +1,60 @@
+################################################################
+# Global configuration
+################################################################
+global:
+    sendAnonymousUsage: false
+
+serversTransport:
+    insecureSkipVerify: true
+
+################################################################
+# EntryPoints configuration
+################################################################
+entryPoints:
+    web:
+        address: :80
+        http:
+            tls: false
+            redirections:
+                entryPoint:
+                    to: websecure
+                    scheme: https
+
+    websecure:
+        address: :443
+        http:
+            tls: true
+
+    mysql:
+        address: :3306
+
+################################################################
+# Traefik logs configuration
+################################################################
+log:
+    level: ERROR
+    filePath: "/traefik.log"
+    format: json
+
+################################################################
+# API and dashboard configuration
+################################################################
+api:
+    dashboard: true
+
+################################################################
+# Docker configuration backend
+################################################################
+
+providers:
+    docker:
+        watch: true
+        endpoint: "unix:///var/run/docker.sock"
+        defaultRule: 'Host(`{{ .Name }}.{{ env "DEV_HOST" }}`)'
+        exposedByDefault: false
+        network: "webgateway"
+
+    file:
+        filename: "/ssl.yml"
+        watch: true
+

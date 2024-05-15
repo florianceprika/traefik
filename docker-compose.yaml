@@ -1,0 +1,27 @@
+services:
+    traefik:
+        image: traefik:latest
+        command:
+            - "--api.insecure=true"
+            - "--entrypoints.mysql.address=:3306"
+        networks:
+            - webgateway
+        ports:
+            - "80:80"
+            - "443:443"
+            - "8080:8080"
+            - "3306:3306"
+        env_file:
+            - .env
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./docker/traefik.yml:/traefik.yml
+            - ./docker/traefik.log:/traefik.log
+            - ./docker/ssl.yml:/ssl.yml
+            - ./docker/certs:/certs
+        restart:
+            always
+
+networks:
+    webgateway:
+        external: true

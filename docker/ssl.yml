@@ -1,0 +1,14 @@
+tls:
+    stores:
+        default:
+            defaultCertificate:
+                certFile: "/certs/nginx.crt"
+                keyFile: "/certs/nginx.key"
+
+http:
+    routers:
+        dashboard:
+            entryPoints:
+                - websecure
+            service: "api@internal"
+            rule: 'Host(`dashboard.{{ env "DEV_HOST" }}`)'
