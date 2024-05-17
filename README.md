@@ -92,4 +92,31 @@ Now that you have Traefik running, it's time to add Traefik to your Magento proj
          - db
      ```
 
+   - **Database Service:**
+     ```yaml
+     db:
+       image: mariadb:10.6
+       command:
+         --max_allowed_packet=64M
+         --optimizer_use_condition_selectivity=1
+         --optimizer_switch="rowid_filter=off"
+       networks:
+         - webgateway-green
+       labels:
+         - "traefik.enable=true"
+         - "traefik.tcp.routers.db-green.rule=HostSNI(`*`)"
+         - "traefik.tcp.services.db-green.loadbalancer.server.port=3306"
+         - "traefik.tcp.routers.db-green.entrypoints=mysql"
+       env_file: env/db.env
+       volumes:
+         - dbdata-green:/var/lib/mysql
+     ```
+
+     You can connect to the database using an external client like [TablePlus](https://tableplus.com) with the following configuration:
+     - **Host:** 127.0.0.1
+     - **Port:** 3306
+     - **User:** root
+     - **Password:** magento
+     - **Database:** magento
+
 You can find the full `compose.yaml` and `compose.dev.yaml` files in the `/compose` directory.
