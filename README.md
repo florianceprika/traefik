@@ -4,7 +4,13 @@
 
 ### Setup Traefik
 
-1. **Install SSL Certificates:**
+1. **Install mkcert:**
+   - If you don't have it, install mkcert using Homebrew:
+     ```sh
+     brew install mkcert
+     ```
+
+2. **Install SSL Certificates:**
    - Install SSL certificates in `/docker/certs/`.
    - Use `mkcert` to set up your SSL certificates:
      ```sh
@@ -12,13 +18,19 @@
      mkcert -key-file docker/certs/nginx.key -cert-file docker/certs/nginx.crt localhost
      ```
 
-2. **Start Traefik:**
-   - Once installed, start Traefik with:
+3. **Create Docker Network:**
+   - Create the required Docker network:
+     ```sh
+     docker network create webgateway
+     ```
+
+4. **Start Traefik:**
+   - Once installed and network created, start Traefik with:
      ```sh
      docker compose up -d
      ```
 
-3. **Access Traefik Dashboard:**
+5. **Access Traefik Dashboard:**
    - The Traefik dashboard should be available at: [https://dashboard.localhost/dashboard/#/http/routers](https://dashboard.localhost/dashboard/#/http/routers)
 
 ### Setup Magento
